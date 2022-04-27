@@ -72,7 +72,7 @@ def capacity_charge ():
     cur_vol = -1
 
    
-    upper_voltage_limit = max_voltage_units * 0.80
+    upper_voltage_limit = max_voltage_units * 0.8
 
     while (cur_vol < upper_voltage_limit):
 
@@ -93,7 +93,7 @@ def capacity_discharge ():
     # Start value
     cur_vol = 255
 
-    lower_voltage_limit = max_voltage_units * 0.20
+    lower_voltage_limit = max_voltage_units * 0.2
 
     while (cur_vol > lower_voltage_limit):
 
@@ -122,13 +122,40 @@ if __name__ == '__main__':
 
     try:
 
-        #measures = capacity_charge()
+        start_time = time.time()
 
-        measures = capacity_discharge ()
+        measures = capacity_charge()
 
-        plt.scatter (list (range (len (measures))), measures)
+        measures += capacity_discharge ()
 
-        plt.show ()
+        N = len(measures)
+
+        experiment_time = time.time() - start_time
+
+        oscillation_rate = N / experiment_time
+
+        with open('settings.txt', 'w+') as file:
+
+            str_to_write = str(oscillation_rate) + '\n'
+
+            file.write(str_to_write)
+
+            str_to_write = str(maxVoltage / max_voltage_units) + '\n'
+
+            file.write(str_to_write)
+
+        with open('data.txt', 'w+') as file:
+
+            file.write('\n'.join(str(x) for x in measures))
+
+        print(f'Период эксперимента: {experiment_time}\n')
+        print(f'Период измерения: {experiment_time / N}\n')
+        print(f'Ср частота дискретизации: {oscillation_rate}\n')
+        print(f'Шаг квантования: {maxVoltage / max_voltage_units}\n')
+
+        plt.scatter(list (range (len (measures))), measures)
+
+        plt.savefig('my_graph.png')
 
 
     except Exception as ex:
