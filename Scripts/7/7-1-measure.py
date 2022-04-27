@@ -72,7 +72,7 @@ def capacity_charge ():
     cur_vol = -1
 
    
-    upper_voltage_limit = max_voltage_units * 0.8
+    upper_voltage_limit = max_voltage_units * 0.9
 
     while (cur_vol < upper_voltage_limit):
 
@@ -93,7 +93,7 @@ def capacity_discharge ():
     # Start value
     cur_vol = 255
 
-    lower_voltage_limit = max_voltage_units * 0.2
+    lower_voltage_limit = max_voltage_units * 0.05
 
     while (cur_vol > lower_voltage_limit):
 
